@@ -23,15 +23,25 @@ def to_datetime(date_string):
     return dt
 
 def strip_dates(data, start, end):
-      for element in list(data):
-    if start:
-      element_dt = datetime.date(
-          int(element['dateEnd'].split('/')[2]),
-          int(element['dateEnd'].split('/')[1]),
-          int(element['dateEnd'].split('/')[0])
-      )
-      if element_dt < start:
-        data.remove(element)
+    """
+    Strip dates before start date and after end date from a list
+    
+    Parameters:
+        data  (list)     : List of dict elements.  One element must be 'dateEnd' in format YYYY/MM/DD.
+        start (datetime) : earliest date for which informations is required
+        end   (datetime) : latest (ost recent) date for which data is required
+    Returns:
+        data (list).     : stripped version of input list)
+    """
+    for element in list(data):
+     if start:
+        element_dt = datetime.date(
+            int(element['dateEnd'].split('/')[2]),
+            int(element['dateEnd'].split('/')[1]),
+            int(element['dateEnd'].split('/')[0])
+        )
+        if element_dt < start:
+            data.remove(element)
         continue
     if end:
       element_dt = datetime.date(
@@ -45,6 +55,7 @@ def strip_dates(data, start, end):
   return data
 
 def clean_data(data):
+    " Remove redundant dict entries from all elements of the input list "
   for x in data:
     del (x['currencyIso'])
     del (x['refCurrencyIso'])
